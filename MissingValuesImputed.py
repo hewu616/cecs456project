@@ -87,6 +87,21 @@ feature_importance = pd.DataFrame(RF.feature_importances_, index =X_train_scaled
 print("")
 print("Top 10 important features:")
 print(feature_importance.head(10))
+# output
+"""
+Top 10 important features:
+           importance
+width        0.098135
+ancurl288    0.059456
+aratio       0.054134
+url348       0.046260
+ancurl444    0.039142
+height       0.033793
+ancurl274    0.028151
+alt56        0.023112
+alt28        0.021707
+alt8         0.018218
+"""
 
 # Calculate the accuracy of the test set
 from sklearn import metrics
