@@ -1,19 +1,14 @@
-# cecs456project
-Internet Advertisements Data Set comes from UCI Machine Learning Repository 
-(Dua, D. and Karra Taniskidou, E. (2017). UCI Machine Learning Repository [http://archive.ics.uci.edu/ml]. Irvine, CA: University of California, School of Information and Computer Science.)
+# CECS456 Project
 
-Dataset contains 3279 instances with a label of either 'ad' or 'nonad'
+CECS456 Project is a machine learning course project that involves classification of whether an image is an advertisement or not given geometry of the images, texts in the URL, image's URL, alt text, the anchor text, and text near the anchor text. (Dua, D. and Karra Taniskidou, E. (2017). UCI Machine Learning Repository [http://archive.ics.uci.edu/ml]. Irvine, CA: University of California, School of Information and Computer Science.)
 
-Features include 3 continuous variables, and 1555 binary variables.
+## Getting Started
 
-28% of the data are missing.
+- Downloaded 'add.csv' from Kaggle by UCI Machine Learning: https://www.kaggle.com/uciml/internet-advertisements-data-set
+- Ensure Python is installed on your computer.
 
-Task is to classify whether an image is an advertisement or not.
+## Directory
 
-Random Forests and Naive Bayes are used here.
+[MissingValuesImputed.py](./MissingValuesImputed.py) replace all observations containing missing values with median and classify an image  using Random Forest and Naive Bayes
 
-Two approaches are used to account for the missing data.
-
-1. Observations of missing values are removed from the dataset - See 'Missing Values Removed.py'
-
-2. Observations of missing values are imputed using the median - See 'MissingValuesImputed.py'
+[MissingValuesRemoved.py](./MissingValuesRemoved.py) removes all observations containing missing values and classify an image  using Random Forest and Naive Bayes
