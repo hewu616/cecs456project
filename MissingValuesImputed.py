@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+import time
 
 # load csv file
 file = "/Users/jeremybautista/Documents/CECS_456/Project/ad.csv"
@@ -76,10 +77,13 @@ X_test_cont_scaled = pd.DataFrame(scaled.fit_transform(X_test_cont),
 X_train_scaled = pd.concat([X_train_cont_scaled,X_train.iloc[:,3:]], axis=1)
 X_test_scaled = pd.concat([X_test_cont_scaled,X_test.iloc[:,3:]], axis=1)
 
-# Random Forests
+# Random Forest
+start_timeRF=time.time()
 from sklearn.ensemble import RandomForestClassifier
-RF = RandomForestClassifier(n_estimators=10000) # create 100 decision trees
+RF = RandomForestClassifier(n_estimators=100) # create 100 decision trees
 RF.fit(X_train_scaled,Y_train)  # fit the model with Random Forests
+end_timeRF=time.time()
+tot_timeRF=end_timeRF-start_timeRF
 
 # feature importance
 feature_importance = pd.DataFrame(RF.feature_importances_, index =X_train_scaled.columns,
@@ -107,21 +111,56 @@ alt8         0.018218
 from sklearn import metrics
 predictionsRF = RF.predict(X_test_scaled)
 print("")
-print("Random Forest Accuracy:", metrics.accuracy_score(Y_test, predictionsRF))
-# Random Forest Accuracy = 0.9816
+print("Random Forest Runtime:", round(tot_timeRF,3))
+print("")
+print("Random Forest Accuracy:", round(metrics.accuracy_score(Y_test, predictionsRF),3))
+print("")
+print("Random Forest Confusion Matrix:")
+print(metrics.confusion_matrix(Y_test, predictionsRF))
+print("")
+print("Random Forest Results:")
+print(metrics.classification_report(Y_test, predictionsRF))
+"""
+Random Forest Runtime: 1.224
+
+Random Forest Accuracy: 0.98
+
+Random Forest Confusion Matrix:
+[[699   3]
+ [ 13 101]]
+
+Random Forest Results:
+              precision    recall  f1-score   support
+
+           0       0.98      1.00      0.99       702
+           1       0.97      0.89      0.93       114
+
+   micro avg       0.98      0.98      0.98       816
+   macro avg       0.98      0.94      0.96       816
+weighted avg       0.98      0.98      0.98       816
+"""
+
+# Naive Bayes
+start_timeNB=time.time()
 
 # Naive Bayes (Gaussian)
 from sklearn.naive_bayes import GaussianNB
 GNB = GaussianNB()
 GNB.fit(X_train_cont_scaled,Y_train)
+
+# Naive Bayes (Bernoulli)
+from sklearn.naive_bayes import BernoulliNB
+BNB = BernoulliNB()
+BNB.fit(X_train_scaled.iloc[:,3:],Y_train)
+
+end_timeNB=time.time()
+tot_timeNB=end_timeNB-start_timeNB
+
 Gthetas = GNB.theta_
 Gsigma = GNB.sigma_
 GNBpost = GNB.predict_proba(X_test_cont_scaled)
 classprior = GNB.class_prior_
 
-from sklearn.naive_bayes import BernoulliNB
-BNB = BernoulliNB()
-BNB.fit(X_train_scaled.iloc[:,3:],Y_train)
 Bflp =BNB.feature_log_prob_
 BNBpost = BNB.predict_proba(X_test_scaled.iloc[:,3:])
 
@@ -134,5 +173,31 @@ for i in range(len(NB)):
     else:
         predictionsNB[i] = 1
 print("")
-print("Naive Bayes Accuracy:", metrics.accuracy_score(Y_test, predictionsNB))
-# Naive Bayes Accuracy = 0.9681
+print("Naive Bayes Runtime:", round(tot_timeNB,3))
+print("")
+print("Naive Bayes Accuracy:", round(metrics.accuracy_score(Y_test, predictionsNB),3))
+print("")
+print("Naive Bayes Confusion Matrix:")
+print(metrics.confusion_matrix(Y_test, predictionsNB))
+print("")
+print("Naive Bayes Results:")
+print(metrics.classification_report(Y_test, predictionsNB))
+"""
+Naive Bayes Runtime: 0.087
+
+Naive Bayes Accuracy: 0.967
+
+Naive Bayes Confusion Matrix:
+[[700   2]
+ [ 25  89]]
+
+Naive Bayes Results:
+              precision    recall  f1-score   support
+
+           0       0.97      1.00      0.98       702
+           1       0.98      0.78      0.87       114
+
+   micro avg       0.97      0.97      0.97       816
+   macro avg       0.97      0.89      0.92       816
+weighted avg       0.97      0.97      0.97       816
+"""
