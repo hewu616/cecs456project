@@ -3,7 +3,7 @@ import numpy as np
 import time
 
 # load csv file
-file = "/Users/jeremybautista/Documents/CECS_456/Project/ad.csv"
+file = ".../add.csv"
 ad = pd.read_csv(file,low_memory=False, header=0)
 
 # drop the first column
